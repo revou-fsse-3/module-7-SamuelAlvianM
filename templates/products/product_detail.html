@@ -45,10 +45,10 @@
         <tbody>
             {% for review in response_data['product'].reviews %}
             <tr>
-                <td>{{ review.email }}</td>
-                <td>{{ review.rating }}</td>
-                <td>{{ review.review_content }}</td>
-                <td>{{ review.created_at }}</td>
+                <td id = "email_{{ response_data['product'].id }}">{{ review.email }}</td>
+                <td id = "rating_{{ response_data['product'].id }}">{{ review.rating }}</td>
+                <td id = "review_content_{{ response_data['product'].id }}">{{ review.review_content }}</td>
+                <td id = "created_at_{{ response_data['product'].id }}">{{ review.created_at }}</td>
             </tr>
             {% endfor %}
         </tbody>

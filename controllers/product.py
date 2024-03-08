@@ -3,6 +3,7 @@ from connectors.mysql_connector import Session
 from sqlalchemy.orm import sessionmaker
 from connectors.mysql_connector import engine
 from models.product import Product
+from models.review import Review
 from sqlalchemy import select, or_
 
 from flask_login import current_user, login_required
@@ -36,7 +37,7 @@ def product_home():
     response_data['name'] = current_user.name
     return render_template("products/product_home.html", response_data = response_data)
 
-@product_routes.route("/product/<int:id>", methods=['GET'])
+@product_routes.route("/product/<int:id>/review", methods=['GET'])
 def product_detail(id):
     response_data = dict()
 
@@ -133,6 +134,42 @@ def product_update(id):
         return { "message": "Fail to Update data"}
     
     return { "message": "Success updating data"}
+
+
+@product_routes.route("/product/<int:id>/review", methods=['POST'])
+@login_required
+def add_review(id):
+
+    connection = engine.connect()
+    Session = sessionmaker(connection)
+    session = Session()
+
+    
+    try:
+        session.begin()
+
+        product = session.query(Product).filter(Product.id == id).first()
+
+        if product:
+
+            create_review = Review(
+                email=request.form['email'],
+                rating=request.form['rating'],
+                review_content=request.form['review_content']
+            )
+        
+        product.reviews.append(create_review)
+        
+        session.add(create_review)
+        session.commit()
+        return { "message": "Review added"}
+
+    except Exception as e:
+            session.rollback()
+            return { "message": "Something Went Wrong"}
+    finally:
+        session.close()
+
 
 
 

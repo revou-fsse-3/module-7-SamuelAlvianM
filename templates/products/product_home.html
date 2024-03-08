@@ -144,6 +144,7 @@
                     <a href="{{ url_for('product_routes.product_detail', id=product.id) }}">See Reviews </a>
                     <button onclick="openEditProductForm(this)" id="edit_{{ product.id }}">Edit</button>
                     <button onclick="deleteProduct(this)" id="delete_{{ product.id }}">Delete</button>
+                    <button onclick="openReviewForm(this)" id="review_{{ product.id }}">Give Review</button>
                 </td>
             </tr>
             {% endfor %}
@@ -163,6 +164,21 @@
             <button type="button" onclick="closeNewProductForm()">Cancel</button>
         </form>
     </div>
+
+    <div id="reviewForm" style="display: none;">
+        <h3 id="reviewSection">Give Review {{ response_data['product_name'] }} </h3>
+        <form id="formReview">
+            <label for="email">Email:</label><br>
+            <input type="text" id="email" name="email"><br><br>
+            <label for="reviewContent">Review:</label><br>
+            <textarea id="reviewContent" name="reviewContent" rows="4" cols="50" placeholder="Let me know your thoughts"></textarea><br><br>
+            <label for="rating">Rating (1-10):</label>
+            <input type="number" id="rating" name="rating" min="1" max="10"><br><br>
+            <button type="button" onclick="submitReviewForm()">Submit</button>
+            <button type="button" onclick="closeReviewForm()">Cancel</button>
+        </form>
+    </div>
+    
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script>
         var form_url = "";
@@ -232,6 +248,38 @@
         function search(){
             window.location = base_url + "?query=" + $('#searchInput').val();
         }
+
+
+        function openReviewForm(button) {
+            var selected_product_id = button.id.split("_")[1];
+            form_method = 'POST';
+            form_url = base_url + "/" + selected_product_id + "/review"
+            document.getElementById("reviewForm").style.display = "block";
+            document.getElementById("formReview").reset();
+        }
+
+        function closeReviewForm() {
+            document.getElementById("reviewForm").style.display = "none";
+        }
+
+        function submitReviewForm() {
+
+            var request_data = {
+                email: $('#email').val(),
+                review_content: $('#reviewContent').val(),
+                rating: $('#rating'). val()
+            }
+
+            $.ajax({
+                url: form_url,
+                data: request_data,
+                method: form_method
+            }).done(function(response){
+                alert(response.message);
+                location.reload();
+            })
+        }
+
 
     </script>
 </body>
