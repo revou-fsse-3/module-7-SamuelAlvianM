@@ -1,7 +1,9 @@
 from flask import Blueprint, render_template, request, jsonify
 from connectors.mysql_connector import Session
 from models.review import Review
-from sqlalchemy import select, or_
+from sqlalchemy.orm import sessionmaker
+from connectors.mysql_connector import engine
+from sqlalchemy import  select, or_
 from flask_login import current_user, login_required
 
 review_routes = Blueprint('review_routes', __name__)
@@ -10,6 +12,9 @@ review_routes = Blueprint('review_routes', __name__)
 @login_required
 def review_home():
     response_data = dict()
+
+    connection = engine.connect()
+    Session = sessionmaker(connection)
     session = Session()
 
     try:
@@ -33,6 +38,9 @@ def review_home():
 @review_routes.route("/review/<id>", methods=['GET'])
 def review_detail(id):
     response_data = dict()
+    
+    connection = engine.connect()
+    Session = sessionmaker(connection)
     session = Session()
 
     try:

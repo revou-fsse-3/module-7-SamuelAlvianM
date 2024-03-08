@@ -141,7 +141,7 @@
                 <td id="price_{{ product.id }}">{{ product.price }}</td>
                 <td id="desc_{{ product.id }}">{{ product.description }}</td>
                 <td>
-                    <a href="{{ url_for('product_routes.product_detail', id=product.id) }}">Review</a>
+                    <a href="{{ url_for('product_routes.product_detail', id=product.id) }}">See Reviews </a>
                     <button onclick="openEditProductForm(this)" id="edit_{{ product.id }}">Edit</button>
                     <button onclick="deleteProduct(this)" id="delete_{{ product.id }}">Delete</button>
                 </td>

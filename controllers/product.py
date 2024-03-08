@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request
 from connectors.mysql_connector import Session
-
+from sqlalchemy.orm import sessionmaker
+from connectors.mysql_connector import engine
 from models.product import Product
 from sqlalchemy import select, or_
 
@@ -12,7 +13,9 @@ product_routes = Blueprint('product_routes',__name__)
 @login_required
 def product_home():
     response_data = dict()
-
+    
+    connection = engine.connect()
+    Session = sessionmaker(connection)
     session = Session()
 
     try:
@@ -37,7 +40,10 @@ def product_home():
 def product_detail(id):
     response_data = dict()
 
+    connection = engine.connect()
+    Session = sessionmaker(connection)
     session = Session()
+
 
     try:
         product = session.query(Product).filter((Product.id==id)).first()
@@ -53,9 +59,13 @@ def product_detail(id):
 @product_routes.route("/product", methods=['POST'])
 @login_required
 def product_insert():
+
+    connection = engine.connect()
+    Session = sessionmaker(connection)
+    session = Session()
+
     
     try:
-        session = Session()
         session.begin()
 
         new_product = Product(
@@ -78,8 +88,12 @@ def product_insert():
 @product_routes.route("/product/<int:id>", methods=['DELETE'])
 def product_delete(id):
 
+    connection = engine.connect()
+    Session = sessionmaker(connection)
+    session = Session()
+
+
     try:
-        session = Session()
         session.begin()
 
         product = session.query(Product).filter(Product.id==id).first()
@@ -101,6 +115,8 @@ def product_delete(id):
 @product_routes.route("/product/<id>", methods=['PUT'])
 def product_update(id):
 
+    connection = engine.connect()
+    Session = sessionmaker(connection)
     session = Session()
     session.begin()
 
