@@ -46,4 +46,4 @@ def review_detail(id):
 
     return render_template("reviews/review_detail.html", response_data=response_data)
 
-# Other routes for insert, update, and delete reviews can be added similarly
+
