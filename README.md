@@ -2,6 +2,18 @@
 
 # SAM's Documentation - Assignment Module 7
 
+## My Little Notes
+Please Check
+1. LOGIN
+2. Register
+3. Add new Product
+4. Search Product
+5. See Reviews
+6. edit product data
+7. Delete data
+8. Give Response
+9. Back link and logout
+
 ### INSTALL THE REQUIREMENTS
 
 > `pip install -r requirements.txt`
